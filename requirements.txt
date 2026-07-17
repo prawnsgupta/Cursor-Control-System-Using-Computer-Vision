@@ -1,0 +1,13 @@
+# Pinned to the verified working combination (Windows, Python 3.10).
+# NOTE: mediapipe >= 0.10.30 removes the legacy mp.solutions API this project
+# uses (FaceMesh / Hands / face_mesh_connections), and the 0.10.2x line
+# requires numpy < 2, which in turn requires opencv-python 4.x.
+mediapipe>=0.10.9,<0.10.30
+numpy<2
+opencv-python>=4.8,<4.13
+torch
+torch-geometric
+pyautogui
+screen-brightness-control
+pycaw; platform_system == "Windows"
+comtypes; platform_system == "Windows"

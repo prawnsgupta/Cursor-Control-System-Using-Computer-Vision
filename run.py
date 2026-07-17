@@ -1,3 +1,4 @@
+import sys
 import cv2
 import mediapipe as mp
 import torch
@@ -26,7 +27,14 @@ def set_volume(delta):
 
 
 model = FaceCursorModel()
-model.load_state_dict(torch.load("models/face_cursor.pth", map_location="cpu"))
+try:
+    model.load_state_dict(torch.load("models/face_cursor.pth", map_location="cpu"))
+except FileNotFoundError:
+    sys.exit(
+        "models/face_cursor.pth not found. Train one first:\n"
+        "  python collect_data.py   (record your head movements)\n"
+        "  python train.py          (fit the GNN+PINN model)"
+    )
 model.eval()
 
 edges = torch.tensor(
@@ -41,6 +49,8 @@ mp_drawing = mp.solutions.drawing_utils
 mp_styles = mp.solutions.drawing_styles
 
 cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    sys.exit("Could not open webcam (device 0). Close other apps using the camera and retry.")
 
 face_mesh = mp_face_mesh.FaceMesh(
     max_num_faces=1,
